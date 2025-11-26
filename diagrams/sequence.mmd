@@ -1,0 +1,26 @@
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Agent as Profiling Agent
+    participant Profiler as CodeGuru Profiler
+    participant ML as ML Engine
+    participant CW as CloudWatch
+    participant User as Engineer
+
+    loop Every sampling interval
+        App->>Agent: Capture stack samples
+        Agent->>Agent: Aggregate samples
+    end
+
+    Agent->>Profiler: Submit profile batch
+    Profiler->>Profiler: Generate flame graph
+    Profiler->>ML: Analyze for anomalies
+    
+    alt Anomaly Detected
+        ML->>CW: Trigger alarm
+        CW->>User: Send notification
+    end
+
+    User->>Profiler: View flame graph
+    Profiler-->>User: Display hotspots & recommendations
+```

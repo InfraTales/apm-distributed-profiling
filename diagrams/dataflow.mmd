@@ -1,0 +1,46 @@
+```mermaid
+graph LR
+    subgraph Sources["Data Sources"]
+        CPU[CPU Samples]
+        Heap[Heap Allocations]
+        Traces[Distributed Traces]
+    end
+
+    subgraph Collection["Collection"]
+        Agent[Profiling Agent]
+        SDK[X-Ray SDK]
+    end
+
+    subgraph Processing["Processing"]
+        Aggregate[Aggregate Profiles]
+        Correlate[Correlate Traces]
+        Analyze[ML Analysis]
+    end
+
+    subgraph Storage["Storage"]
+        Profiles[Profile Store]
+        TraceDB[Trace Database]
+        Metrics[CloudWatch Metrics]
+    end
+
+    subgraph Output["Output"]
+        FlameGraph[Flame Graphs]
+        ServiceMap[Service Map]
+        Alerts[Anomaly Alerts]
+        Reports[Performance Reports]
+    end
+
+    CPU --> Agent
+    Heap --> Agent
+    Traces --> SDK
+    Agent --> Aggregate
+    SDK --> Correlate
+    Aggregate --> Profiles
+    Correlate --> TraceDB
+    Aggregate --> Analyze
+    Analyze --> Metrics
+    Profiles --> FlameGraph
+    TraceDB --> ServiceMap
+    Metrics --> Alerts
+    Profiles --> Reports
+```

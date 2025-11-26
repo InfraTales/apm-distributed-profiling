@@ -1,0 +1,52 @@
+```mermaid
+graph TD
+    subgraph Applications["Instrumented Applications"]
+        App1[Java Service]
+        App2[Python Service]
+        App3[Node.js Service]
+    end
+
+    subgraph Agents["Profiling Agents"]
+        Agent1[CodeGuru Agent]
+        Agent2[X-Ray SDK]
+    end
+
+    subgraph Collection["Data Collection"]
+        Profiler[CodeGuru Profiler]
+        XRay[AWS X-Ray]
+    end
+
+    subgraph Processing["Analysis Layer"]
+        ML[ML Anomaly Detection]
+        Aggregation[Profile Aggregation]
+        Correlation[Trace Correlation]
+    end
+
+    subgraph Storage["Storage"]
+        S3[S3 Profile Archives]
+        DDB[DynamoDB Metadata]
+    end
+
+    subgraph Visualization["Dashboards"]
+        FlameGraph[Flame Graph Viewer]
+        ServiceMap[X-Ray Service Map]
+        Alerts[CloudWatch Alarms]
+    end
+
+    App1 --> Agent1
+    App2 --> Agent1
+    App3 --> Agent1
+    App1 --> Agent2
+    App2 --> Agent2
+    App3 --> Agent2
+    Agent1 --> Profiler
+    Agent2 --> XRay
+    Profiler --> ML
+    Profiler --> Aggregation
+    XRay --> Correlation
+    Aggregation --> S3
+    Aggregation --> DDB
+    ML --> Alerts
+    Profiler --> FlameGraph
+    XRay --> ServiceMap
+```
