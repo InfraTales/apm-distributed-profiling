@@ -74,4 +74,4 @@ Common issues and resolutions for the **APM Distributed Profiling** platform.
 - Reduce sampling rate for high-traffic services
 - Implement lifecycle policies for profile storage
 
-> For architecture details, see `ARCHITECTURE.md`.
+> For architecture details, see the project README.
