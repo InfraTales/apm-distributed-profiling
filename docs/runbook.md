@@ -1,87 +1,70 @@
-# Runbook
+# Operations Runbook
 
-Operational guide for deploying, operating, and maintaining the **APM Distributed Profiling** platform.
+## Overview
+This runbook provides operational procedures for managing and maintaining this infrastructure.
 
-## 1. Deployment
+## Prerequisites
+- AWS CLI configured
+- Terraform/CDK/Pulumi installed
+- Appropriate IAM permissions
 
-### Prerequisites
+## Common Operations
 
-- AWS CLI configured with appropriate credentials
-- Node.js 18+ and npm installed
-- AWS CDK CLI installed (`npm install -g aws-cdk`)
-
-### Deploy Steps
-
+### Deployment
 ```bash
-# Install dependencies
-npm install
+# Development
+./scripts/deploy.sh dev
 
-# Bootstrap CDK (first time only)
-cdk bootstrap
-
-# Deploy to dev
-cdk deploy --context environment=dev
-
-# Deploy to production
-cdk deploy --context environment=prod
+# Production
+./scripts/deploy.sh prod
 ```
 
-## 2. Agent Setup
+### Monitoring
+- CloudWatch Dashboard: Check AWS Console
+- Alerts: Configured via SNS
+- Logs: CloudWatch Logs
 
-### Application Integration
+### Troubleshooting
 
-```java
-// Java example - add to JVM arguments
--javaagent:/path/to/codeguru-profiler-agent.jar
-```
+#### Issue: Deployment Fails
+**Symptoms**: Terraform/CDK apply fails
+**Resolution**:
+1. Check AWS credentials
+2. Verify IAM permissions
+3. Review error logs
+4. Check resource quotas
 
-```python
-# Python example
-from codeguru_profiler_agent import Profiler
-Profiler(profiling_group_name='my-app').start()
-```
+#### Issue: High Costs
+**Symptoms**: Unexpected AWS charges
+**Resolution**:
+1. Review Cost Explorer
+2. Check for unused resources
+3. Verify auto-scaling policies
+4. Review instance types
 
-## 3. Monitoring
+### Maintenance Windows
+- Preferred: Sunday 02:00-06:00 UTC
+- Avoid: Business hours (09:00-17:00 local time)
 
-### Key Metrics to Watch
+### Escalation
+1. Team Lead
+2. DevOps Manager
+3. On-call Engineer
 
-- **Profile submission rate**: Agent health indicator
-- **Flame graph generation time**: Processing latency
-- **Anomaly detection alerts**: Performance regressions
-- **Agent coverage**: Percentage of services instrumented
+## Emergency Procedures
 
-### Dashboards
-
-Pre-configured dashboards show:
-
-- Service performance overview
-- CPU hotspot analysis
-- Memory allocation patterns
-- Regression detection alerts
-
-## 4. Maintenance
-
-### Regular Tasks
-
-- Review profiling group configurations quarterly
-- Update profiling agents to latest version
-- Archive old profiles to reduce storage costs
-- Review and tune anomaly detection thresholds
-
-### Troubleshooting Agent Issues
-
+### Rollback
 ```bash
-# Check agent logs
-tail -f /var/log/codeguru-profiler/profiler.log
+# Terraform
+terraform apply -var-file=previous.tfvars
 
-# Verify IAM permissions
-aws iam simulate-principal-policy --policy-source-arn <agent-role-arn>
+# CDK
+cdk deploy --previous-version
+
+# Pulumi
+pulumi stack select previous
+pulumi up
 ```
 
-### Teardown
-
-```bash
-cdk destroy --context environment=dev
-```
-
-> For troubleshooting common issues, see `docs/troubleshooting.md`.
+### Disaster Recovery
+See [DISASTER_RECOVERY.md](DISASTER_RECOVERY.md)
